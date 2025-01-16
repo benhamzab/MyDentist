@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Material</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* Global Styles */
+    body {
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #e2e8f0, #f7fafc);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 600px;
+      background-color: #ffffff;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    h1 {
+      font-size: 28px;
+      color: #2c5282;
+      text-align: center;
+      margin-bottom: 20px;
+      font-weight: bold;
+      border-bottom: 2px solid #1a202c;
+      padding-bottom: 10px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    label {
+      font-size: 16px;
+      font-weight: bold;
+      color: #2d3748;
+    }
+
+    input, select {
+      padding: 12px;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 16px;
+      color: #2d3748;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: #1a202c;
+      box-shadow: 0 4px 10px rgba(49, 130, 206, 0.2);
+    }
+
+    .btn-submit {
+      background-color: #1a202c;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    .btn-submit:hover {
+      background-color: #1a202c;
+      transform: scale(1.05);
+    }
+
+    .btn-back {
+      display: block;
+      margin-top: 15px;
+      text-align: center;
+      text-decoration: none;
+      color: #1a202c;
+      font-size: 14px;
+      font-weight: bold;
+      transition: color 0.3s ease;
+    }
+
+    .btn-back:hover {
+      color: #1a202c;
+      text-decoration: underline;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Edit Material</h1>
+    <form id="editMaterialForm">
+      <div>
+        <label for="materialName">Material Name:</label>
+        <input type="text" id="materialName" value="Dental Floss" required>
+      </div>
+      <div>
+        <label for="quantity">Quantity:</label>
+        <input type="number" id="quantity" value="20" required>
+      </div>
+      <div>
+        <label for="stockStatus">Stock Status:</label>
+        <select id="stockStatus" required>
+          <option value="In Stock" selected>In Stock</option>
+          <option value="Low Stock">Low Stock</option>
+          <option value="Out of Stock">Out of Stock</option>
+        </select>
+      </div>
+      <button type="submit" class="btn-submit">Update Material</button>
+    </form>
+    <a href="manage-materials.html" class="btn-back">Back to Manage Materials</a>
+  </div>
+
+  <script>
+    document.getElementById('editMaterialForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      alert('Material updated successfully!');
+    });
+  </script>
+</body>
+</html>

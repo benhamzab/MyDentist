@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Patients</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="manage-patients.css">
+</head>
+<body>
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="logo">
+      <h1>MyDentist</h1>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+        <li><a href="manage-patients.html" class="active"><i class="fas fa-user"></i> Manage Patients</a></li>
+        <li><a href="manage-secretary.html"><i class="fas fa-user-tie"></i> Manage Secretary</a></li>
+        <li><a href="reports.html"><i class="fas fa-file-alt"></i> Reports</a></li>
+        <li><a href="manageappointments.html"><i class="fas fa-calendar-check"></i> Manage Appointments</a></li>
+        <li><a href="../../index.html"><i class="fas fa-sign-out-alt"></i> Log Out </a></li>
+
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Top Bar -->
+    <header class="top-bar">
+      <h2>Manage Patients</h2>
+    </header>
+
+    <!-- Content Section -->
+    <section class="content">
+      <a href="addpatient.html" class="btn-add"><i class="fas fa-user-plus"></i> Add Patient</a>
+      <table id="patientTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Gender</th>
+            <th>Contact</th>
+            <th>Cause for Visit</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Dynamic Content -->
+        </tbody>
+      </table>
+      <button onclick="downloadJSON()">Download JSON</button>
+    </section>
+  </main>
+
+  <script>
+    function loadPatients() {
+      const patients = JSON.parse(localStorage.getItem("patients")) || [];
+      const patientTable = document.getElementById("patientTable").querySelector("tbody");
+
+      patientTable.innerHTML = "";
+
+      patients.forEach(patient => {
+        const row = `
+          <tr>
+            <td>${patient.id}</td>
+            <td>${patient.name}</td>
+            <td>${patient.age}</td>
+            <td>${patient.gender || "N/A"}</td>
+            <td>${patient.contact}</td>
+            <td>${patient.cause || "N/A"}</td>
+            <td>
+              <button class="btn-edit" onclick="editPatient(${patient.id})"><i class="fas fa-edit"></i></button>
+              <button class="btn-delete" onclick="deletePatient(${patient.id})"><i class="fas fa-trash"></i></button>
+            </td>
+          </tr>
+        `;
+        patientTable.innerHTML += row;
+      });
+    }
+
+    function editPatient(id) {
+  const patients = JSON.parse(localStorage.getItem("patients")) || [];
+  const patient = patients.find(p => p.id === id);
+  if (patient) {
+    const newCause = prompt("Edit Cause for Visit:", patient.cause || "");
+    const newGender = prompt("Edit Gender:", patient.gender || "N/A");
+    if (newCause !== null) patient.cause = newCause;
+    if (newGender !== null) patient.gender = newGender.toLowerCase();
+    localStorage.setItem("patients", JSON.stringify(patients));
+    loadPatients();
+  }
+}
+
+
+    function deletePatient(id) {
+      let patients = JSON.parse(localStorage.getItem("patients")) || [];
+      patients = patients.filter(patient => patient.id !== id);
+      localStorage.setItem("patients", JSON.stringify(patients));
+      saveJSONToFile(patients);
+      loadPatients();
+    }
+
+    function saveJSONToFile(data) {
+  const normalizedData = data.map(p => ({
+    ...p,
+    gender: p.gender ? p.gender.toLowerCase() : "n/a"
+  }));
+  const json = JSON.stringify(normalizedData, null, 2); // Pretty format JSON
+  const blob = new Blob([json], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "patients.json";
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+
+    function downloadJSON() {
+      const patients = JSON.parse(localStorage.getItem("patients")) || [];
+      saveJSONToFile(patients);
+    }
+
+    // Load patients on page load
+    document.addEventListener("DOMContentLoaded", loadPatients);
+  </script>
+</body>
+</html>

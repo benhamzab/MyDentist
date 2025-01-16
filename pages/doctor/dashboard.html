@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Doctor Dashboard</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="dashboard.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="../../images/logo.png" alt="MyManager Logo">
+      <h1>MyManager</h1>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="dashboard.html" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+        <li><a href="manage-patients.html"><i class="fas fa-user"></i> Manage Patients</a></li>
+        <li><a href="manage-secretary.html"><i class="fas fa-user-tie"></i> Manage Secretary</a></li>
+        <li><a href="reports.html"><i class="fas fa-file-alt"></i> Reports</a></li>
+        <li><a href="manageappointments.html"><i class="fas fa-calendar-check"></i> Manage Appointments</a></li>
+        <li><a href="../../index.html"><i class="fas fa-sign-out-alt"></i> Log Out </a></li>
+
+      </ul>
+    </nav>
+  </aside>
+
+ <!-- Main Content -->
+ <main class="main-content">
+  <!-- Top Bar -->
+  <header class="top-bar">
+    <h2>Welcome, Doctor</h2>
+  </header>
+    <!-- Charts Section -->
+    <section class="chart-section">
+      <h3>Dashboard Overview</h3>
+      <div class="chart-container">
+        <canvas id="patientsColumnChart"></canvas>
+      </div>
+      <div class="chart-container">
+        <canvas id="appointmentsBarChart"></canvas>
+      </div>
+      <div class="chart-container">
+        <canvas id="secretaryColumnChart"></canvas>
+      </div>
+      <div class="chart-container">
+        <canvas id="reportsPieChart"></canvas>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // Retrieve data from localStorage
+      const patients = JSON.parse(localStorage.getItem("patients")) || [];
+      const appointments = JSON.parse(localStorage.getItem("appointments")) || [];
+      const secretaries = JSON.parse(localStorage.getItem("secretaries")) || [];
+      const reports = JSON.parse(localStorage.getItem("reports")) || [];
+
+      // Normalize case for filtering (Gender and Role)
+      const normalizedPatients = patients.map(p => ({
+        ...p,
+        gender: p.gender?.toLowerCase() || "unknown"
+      }));
+      const normalizedSecretaries = secretaries.map(s => ({
+        ...s,
+        role: s.role?.toLowerCase()
+      }));
+
+      // Chart: Patients by Gender
+      const maleCount = normalizedPatients.filter(p => p.gender === "male").length;
+      const femaleCount = normalizedPatients.filter(p => p.gender === "female").length;
+      new Chart(document.getElementById("patientsColumnChart"), {
+        type: "bar",
+        data: {
+          labels: ["Male", "Female"],
+          datasets: [
+            {
+              label: "Patients by Gender",
+              data: [maleCount, femaleCount],
+              backgroundColor: ["#3498db", "#e74c3c"],
+              borderColor: ["#2980b9", "#c0392b"],
+              borderWidth: 1
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { display: false },
+            title: { display: true, text: "Patients by Gender" }
+          },
+          scales: {
+            y: { beginAtZero: true, title: { display: true, text: "Count" } },
+            x: { title: { display: true, text: "Gender" } }
+          }
+        }
+      });
+
+      // Chart: Secretaries by Role
+      const roleCounts = normalizedSecretaries.reduce((acc, sec) => {
+        acc[sec.role] = (acc[sec.role] || 0) + 1;
+        return acc;
+      }, {});
+      const roleLabels = Object.keys(roleCounts);
+      const roleData = Object.values(roleCounts);
+      new Chart(document.getElementById("secretaryColumnChart"), {
+        type: "bar",
+        data: {
+          labels: roleLabels,
+          datasets: [
+            {
+              label: "Secretaries",
+              data: roleData,
+              backgroundColor: ["#9b59b6", "#3498db", "#e67e22", "#2ecc71", "#f1c40f"]
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          indexAxis: "y", // Horizontal bar chart
+          plugins: {
+            legend: { display: false },
+            title: { display: true, text: "Secretaries by Role" }
+          },
+          scales: {
+            x: { beginAtZero: true, title: { display: true, text: "Count" } }
+          }
+        }
+      });
+
+      // Chart: Appointments Status
+      const appointmentCounts = ["Approved", "Pending", "Rejected"].map(status =>
+        appointments.filter(a => a.status === status).length
+      );
+      new Chart(document.getElementById("appointmentsBarChart"), {
+        type: "bar",
+        data: {
+          labels: ["Approved", "Pending", "Rejected"],
+          datasets: [
+            {
+              label: "Appointments Status",
+              data: appointmentCounts,
+              backgroundColor: ["#2ecc71", "#f1c40f", "#e74c3c"]
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { display: false },
+            title: { display: true, text: "Appointments Status" }
+          },
+          scales: {
+            y: { beginAtZero: true }
+          }
+        }
+      });
+
+      // Chart: Reports by Reason
+      const reportCounts = reports.reduce((acc, report) => {
+        acc[report.reason] = (acc[report.reason] || 0) + 1;
+        return acc;
+      }, {});
+      new Chart(document.getElementById("reportsPieChart"), {
+        type: "pie",
+        data: {
+          labels: Object.keys(reportCounts),
+          datasets: [
+            {
+              data: Object.values(reportCounts),
+              backgroundColor: ["#3498db", "#e74c3c", "#2ecc71", "#f1c40f", "#9b59b6"]
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { position: "top" },
+            title: { display: true, text: "Reports by Reason" }
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>

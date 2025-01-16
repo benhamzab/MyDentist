@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Report</title>
+  <link rel="stylesheet" href="ADDREPORTS.CSS">
+</head>
+<body>
+  <div class="container">
+    <h1>Add Report</h1>
+    <form id="addReportForm">
+      <div>
+        <label for="reportName">Report Name:</label>
+        <input type="text" id="reportName" placeholder="Enter report name" required>
+      </div>
+      <div>
+        <label for="date">Date:</label>
+        <input type="date" id="date" required>
+      </div>
+      <div>
+        <label for="reason">Reason for Visit:</label>
+        <input type="text" id="reason" placeholder="Enter reason for visit" required>
+      </div>
+      <div>
+        <label for="note">Note:</label>
+        <textarea id="note" rows="4" placeholder="Enter additional notes"></textarea>
+      </div>
+      <button type="submit" class="btn-submit">Add Report</button>
+    </form>
+    <a href="reports.html" class="btn-back">Back to Reports</a>
+  </div>
+
+  <script>
+    document.getElementById("addReportForm").addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      // Retrieve values from form fields
+      const reportName = document.getElementById("reportName").value;
+      const date = document.getElementById("date").value;
+      const reason = document.getElementById("reason").value;
+      const note = document.getElementById("note").value;
+
+      // Retrieve existing reports from localStorage or initialize an empty array
+      const reports = JSON.parse(localStorage.getItem("reports")) || [];
+
+      // Add the new report to the array
+      reports.push({
+        id: reports.length + 1,
+        reportName,
+        date,
+        reason,
+        note,
+      });
+
+      // Save the updated reports back to localStorage
+      localStorage.setItem("reports", JSON.stringify(reports));
+
+      // Success message and redirect
+      alert("Report added successfully!");
+      window.location.href = "reports.html";
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Materials</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="ADDMaterials.CSS">
+  <style>
+    /* Sidebar for the list */
+    .material-list-sidebar {
+      position: fixed;
+      right: 0;
+      top: 0;
+      width: 300px;
+      height: 100%;
+      background-color: #f4f4f4;
+      overflow-y: auto;
+      padding: 20px;
+      box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .material-list-sidebar h2 {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    .material-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .material-list li {
+      padding: 8px;
+      border-bottom: 1px solid #ccc;
+      font-size: 14px;
+    }
+
+    .material-list li:last-child {
+      border-bottom: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Add Material</h1>
+    <form id="addMaterialForm">
+      <div>
+        <label for="materialName">Material Name:</label>
+        <input type="text" id="materialName" placeholder="Enter material name" required>
+      </div>
+      <div>
+        <label for="quantity">Quantity:</label>
+        <input type="number" id="quantity" placeholder="Enter quantity" required>
+      </div>
+      <div>
+        <label for="stockStatus">Stock Status:</label>
+        <select id="stockStatus" required>
+          <option value="">Select status</option>
+          <option value="In Stock">In Stock</option>
+          <option value="Low Stock">Low Stock</option>
+          <option value="Out of Stock">Out of Stock</option>
+        </select>
+      </div>
+      <button type="submit" class="btn-submit">Add Material</button>
+    </form>
+    <a href="manage-materials.html" class="btn-back">Back to Manage Materials</a>
+  </div>
+
+  <!-- Sidebar for Material List -->
+  <div class="material-list-sidebar">
+    <h2>Material List</h2>
+    <ul id="materialList" class="material-list">
+      <!-- Material items will be dynamically added here -->
+    </ul>
+  </div>
+
+  <script>
+    const materialList = [
+      "Fluoride Gel and Varnish",
+      "Unnamed Material",
+      "Dental Sealants",
+      "Composite Resins",
+      "Bonding Agents",
+      "Dental Amalgam",
+      "Disposable Gloves",
+      "Surface Disinfectants",
+      "Sterilization Pouches",
+      "Alginate Impression Material",
+      "Silicone-Based Impression Material",
+      "Impression Trays",
+      "Lidocaine Cartridges",
+      "Topical Anesthetic Gel",
+      "Dental Syringes",
+      "Digital Scanners",
+      "Milling Machines",
+      "Design Software",
+      "Temporary Crown Materials",
+      "Dental Cements",
+      "Crown Molds and Kits"
+    ];
+
+    // Populate the material list in the sidebar
+    const materialListElement = document.getElementById('materialList');
+    materialList.forEach(material => {
+      const listItem = document.createElement('li');
+      listItem.textContent = material;
+      materialListElement.appendChild(listItem);
+    });
+
+    document.getElementById('addMaterialForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      // Get form values
+      const materialName = document.getElementById('materialName').value.trim();
+      const quantity = parseInt(document.getElementById('quantity').value.trim());
+      const stockStatus = document.getElementById('stockStatus').value.trim();
+
+      // Validate inputs
+      if (!materialName || isNaN(quantity) || !stockStatus) {
+        alert('Please fill in all fields correctly!');
+        return;
+      }
+
+      // Get existing materials from localStorage
+      let materials = JSON.parse(localStorage.getItem('materials')) || [];
+
+      // Add new material
+      materials.push({
+        id: materials.length + 1,
+        name: materialName,
+        quantity: quantity,
+        stockStatus: stockStatus
+      });
+
+      // Save back to localStorage
+      localStorage.setItem('materials', JSON.stringify(materials));
+
+      // Redirect to Manage Materials page
+      alert('Material added successfully!');
+      window.location.href = 'manage-materials.html';
+    });
+  </script>
+</body>
+</html>

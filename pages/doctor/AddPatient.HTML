@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Patient</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="AddPatient.css">
+</head>
+<body>
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <h1>MyManager</h1>
+    <nav>
+      <ul>
+        <li><a href="dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+        <li><a href="manage-patients.html"><i class="fas fa-user"></i> Manage Patients</a></li>
+        <li><a href="addpatient.html" class="active"><i class="fas fa-user-plus"></i> Add Patient</a></li>
+        <li><a href="manage-secretary.html"><i class="fas fa-user-tie"></i> Manage Secretary</a></li>
+        <li><a href="reports.html"><i class="fas fa-file-alt"></i> Reports</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Top Bar -->
+    <header class="top-bar">
+      <h2>Add New Patient</h2>
+    </header>
+
+    <!-- Form Section -->
+    <section class="content">
+      <form id="addPatientForm" class="form-container">
+        <div class="form-group">
+          <label for="patientName">Name:</label>
+          <input type="text" id="patientName" name="patientName" placeholder="Enter patient name" required>
+        </div>
+
+        <div class="form-group">
+          <label for="patientAge">Age:</label>
+          <input type="number" id="patientAge" name="patientAge" placeholder="Enter patient age" required>
+        </div>
+
+        <div class="form-group">
+          <label for="patientGender">Gender:</label>
+          <select id="patientGender" name="patientGender" required>
+            <option value="" disabled selected>Select Gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="patientContact">Contact:</label>
+          <input type="tel" id="patientContact" name="patientContact" placeholder="Enter patient contact" required>
+        </div>
+
+        <div class="form-group">
+          <label for="cause">Cause for Visit:</label>
+          <textarea id="cause" name="cause" rows="4" placeholder="Enter cause or note for visit"></textarea>
+        </div>
+
+        <div class="form-group">
+          <button type="submit" class="btn-primary"><i class="fas fa-save"></i> Save Patient</button>
+          <a href="manage-patients.html" class="btn-secondary"><i class="fas fa-arrow-left"></i> Back to Patients</a>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <script>
+    // Handle form submission
+    document.getElementById("addPatientForm").addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      // Retrieve form data
+      const name = document.getElementById("patientName").value;
+      const age = document.getElementById("patientAge").value;
+      const gender = document.getElementById("patientGender").value;
+      const contact = document.getElementById("patientContact").value;
+      const cause = document.getElementById("cause").value;
+
+      // Validate required fields
+      if (!name || !age || !gender || !contact) {
+  alert("Please fill in all required fields, including gender!");
+  return;
+}
+
+
+      // Retrieve existing patients or initialize empty array
+      const patients = JSON.parse(localStorage.getItem("patients")) || [];
+
+      // Add new patient
+      const newPatient = {
+        id: patients.length + 1,
+        name,
+        age: parseInt(age),
+        gender,
+        contact,
+        cause,
+      };
+      patients.push(newPatient);
+
+      // Save back to localStorage
+      localStorage.setItem("patients", JSON.stringify(patients));
+
+      // Redirect to Manage Patients page
+      alert("Patient added successfully!");
+      window.location.href = "manage-patients.html";
+    });
+  </script>
+</body>
+</html>

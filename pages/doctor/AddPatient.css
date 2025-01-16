@@ -1,0 +1,135 @@
+ /* Global Styles */
+ body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #1a202c;
+    background-color: #ecf0f1;
+  }
+
+  .container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  /* Sidebar */
+  .sidebar {
+    width: 250px;
+    background-color: #1a202c;
+    color: #ecf0f1;
+    height: 100vh;
+    position: fixed;
+    padding: px;
+  }
+
+  .sidebar h1 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .sidebar nav ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .sidebar nav ul li {
+    margin: 15px 0;
+  }
+
+  .sidebar nav ul li a {
+    text-decoration: none;
+    color: #ecf0f1;
+    padding: 10px;
+    display: block;
+    border-radius: 5px;
+  }
+
+  .sidebar nav ul li a.active,
+  .sidebar nav ul li a:hover {
+    background-color: #1a202c;
+  }
+
+  /* Main Content */
+  .main-content {
+    margin-left: 250px;
+    padding: 20px;
+  }
+
+  .top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .top-bar h2 {
+    font-size: 24px;
+    margin-left: 30px;
+
+  }
+
+  /* Form Container */
+  .form-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 20px auto;
+  }
+
+  .form-group {
+    margin-bottom: 15px;
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+
+  .form-group button {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background-color: #1a202c;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+  }
+
+  .form-group button:hover {
+    background-color: #1a202c;
+  }
+
+  .form-group .btn-secondary {
+    background-color: #ecf0f1;
+    color: #1a202c;
+    text-decoration: none;
+  }
+
+  .form-group .btn-secondary:hover {
+    background-color: #bdc3c7;
+  }
+
+  /* Footer */
+  footer {
+    text-align: center;
+    padding: 10px 0;
+    background-color: #1a202c;
+    color: #ecf0f1;
+  }

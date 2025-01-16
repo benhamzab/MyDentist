@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Secretary Dashboard</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* Global Styles */
+    body {
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f7fa;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 250px;
+      background-color: #1a202c;
+      color: #f4f4f4;
+      height: 100vh;
+      position: fixed;
+      padding: 5px;
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .sidebar .logo {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .sidebar h1 {
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .sidebar nav ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .sidebar nav ul li {
+      margin: 15px 0;
+    }
+
+    .sidebar nav ul li a {
+      text-decoration: none;
+      color: #f4f4f4;
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+
+    .sidebar nav ul li a.active,
+    .sidebar nav ul li a:hover {
+      background-color: #4a5568;
+    }
+
+    /* Main Content */
+    .main-content {
+      margin-left: 250px;
+      padding: 20px;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .top-bar h2 {
+      font-size: 26px;
+      font-weight: bold;
+      color: #2d3748;
+    }
+
+    .logout-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background-color: #e53e3e;
+      color: white;
+      padding: 10px 15px;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+
+    .logout-btn:hover {
+      background-color: #c53030;
+    }
+
+    /* Dashboard Section */
+    .dashboard {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card h3 {
+      font-size: 18px;
+      color: #2d3748;
+      margin-bottom: 10px;
+    }
+
+    .card p {
+      font-size: 20px;
+      font-weight: bold;
+      color: #3182ce;
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="logo">
+      <h1>MyManager</h1>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="dashboard.html" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+        <li><a href="manage-materials.html"><i class="fas fa-boxes"></i> Manage Materials</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Top Bar -->
+    <header class="top-bar">
+      <h2>Welcome, Secretary</h2>
+      <a href="../../login.html" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </header>
+
+    <!-- Dashboard Stats -->
+    <section class="dashboard">
+      <div class="card">
+        <h3>Total Materials</h3>
+        <p id="totalMaterials">0</p>
+      </div>
+      <div class="card">
+        <h3>Low Stock</h3>
+        <p id="lowStockItems">0 Items</p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Function to update dashboard statistics
+    function updateDashboardStats() {
+      // Retrieve materials from localStorage
+      const materials = JSON.parse(localStorage.getItem("materials")) || [];
+  
+      // Calculate Total Materials
+      const totalMaterials = materials.length;
+  
+      // Calculate Low Stock and Out of Stock Materials
+      const lowStockItems = materials.filter(material => 
+        material.stockStatus === "Low Stock" || material.stockStatus === "Out of Stock"
+      ).length;
+  
+      // Update Dashboard
+      document.getElementById("totalMaterials").textContent = totalMaterials;
+      document.getElementById("lowStockItems").textContent = `${lowStockItems} Items`;
+    }
+  
+    // Update stats on page load
+    document.addEventListener("DOMContentLoaded", updateDashboardStats);
+  </script>
+  
+</body>
+</html>

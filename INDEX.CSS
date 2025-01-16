@@ -1,0 +1,321 @@
+/* Global Styles */
+body {
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+  color: #f0f0f0;
+  background-image: url('images/6.jpeg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+/* Container */
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between; /* Space out links and language selector */
+  align-items: center;
+  background-color: rgba(31, 31, 31, 0.9);
+  padding: 15px 20px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.navbar .nav-links {
+  list-style: none;
+  display: flex;
+  gap: 30px; /* Space between links */
+  margin: 0;
+  padding: 0;
+}
+
+.navbar .nav-links a {
+  color: #f0f0f0;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: 500;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.navbar .nav-links a:hover {
+  color: #00bcd4;
+  transform: scale(1.1);
+}
+
+/* Language Selector */
+.language-selector {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Space between label and dropdown */
+}
+
+.language-selector select {
+  background-color: rgba(31, 31, 31, 0.9);
+  color: #f0f0f0;
+  border: 1px solid #00bcd4;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.3s ease, transform 0.3s ease;
+}
+
+.language-selector select:hover,
+.language-selector select:focus {
+  border-color: #008c99;
+  transform: scale(1.05);
+}
+
+/* Hero Section */
+.hero-section {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.8), rgba(31, 31, 31, 0.8));
+  color: #f0f0f0;
+}
+
+.hero-section h1 {
+  font-size: 48px;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  color: #00bcd4;
+}
+
+.hero-section p {
+  font-size: 18px;
+  margin-bottom: 30px;
+}
+
+.btn-primary {
+  background-color: #00bcd4;
+  color: white;
+  padding: 15px 30px;
+  border-radius: 50px;
+  text-transform: uppercase;
+  font-size: 16px;
+  text-decoration: none;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: #008c99;
+  transform: translateY(-3px);
+}
+
+/* Section Styling */
+section {
+  padding: 50px 20px;
+}
+
+section h2 {
+  font-size: 32px;
+  color: #f0f0f0;
+  margin-bottom: 20px;
+}
+
+section p {
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  color: #cccccc;
+}
+
+/* Semi-Transparent Sections */
+.semi-transparent {
+  background-color: rgba(31, 31, 31, 0.95);
+  color: #f0f0f0;
+  border-radius: 10px;
+  padding: 30px;
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.semi-transparent img {
+  max-width: 300px;
+  border-radius: 10px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.semi-transparent .text {
+  flex: 1;
+}
+
+/* Buttons */
+.btn-secondary {
+  background-color: #ff5722;
+  color: white;
+  padding: 15px 30px;
+  border-radius: 50px;
+  text-transform: uppercase;
+  font-size: 16px;
+  text-decoration: none;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background-color: #e64a19;
+  transform: translateY(-3px);
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 20px 0;
+  background-color: rgba(31, 31, 31, 0.9);
+  color: #cccccc;
+}
+
+footer p {
+  font-size: 14px;
+  margin: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .navbar .nav-links {
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .language-selector {
+    align-self: flex-end;
+    margin-top: 10px;
+  }
+
+  .hero-section h1 {
+    font-size: 36px;
+  }
+
+  section h2 {
+    font-size: 28px;
+  }
+
+  section p {
+    font-size: 14px;
+  }
+
+  .semi-transparent {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .semi-transparent img {
+    width: 80%;
+    margin: 0 auto;
+  }
+}
+
+/* Additional Enhancements */
+.hero-section .btn-primary {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+footer p {
+  line-height: 1.4;
+}
+
+/* Global Styles */
+body {
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+  color: #f0f0f0;
+  background-image: url('images/6.jpeg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+/* Container */
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Navbar */
+.navbar {
+  display: flex;
+  justify-content: center; /* Center the content in the navbar */
+  align-items: center;
+  background-color: rgba(31, 31, 31, 0.9);
+  padding: 15px 20px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.navbar .nav-links {
+  display: flex;
+  align-items: center; /* Vertically align items */
+  list-style: none;
+  gap: 30px; /* Space between links */
+  margin: 0;
+  padding: 0;
+}
+
+.navbar .nav-links a {
+  color: #f0f0f0;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: 500;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.navbar .nav-links a:hover {
+  color: #00bcd4;
+  transform: scale(1.1);
+}
+
+/* Language Selector */
+.language-selector {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Space between label and dropdown */
+}
+
+.language-selector select {
+  background-color: rgba(31, 31, 31, 0.9);
+  color: #f0f0f0;
+  border: 1px solid #00bcd4;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.3s ease, transform 0.3s ease;
+}
+
+.language-selector select:hover,
+.language-selector select:focus {
+  border-color: #008c99;
+  transform: scale(1.05);
+}
+
+/* Combine Nav Links and Language Dropdown */
+.navbar .nav-container {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Center everything horizontally */
+  gap: 30px; /* Space between links and dropdown */
+}

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Appointment</title>
+  <link rel="stylesheet" href="AddAppointments.css">
+</head>
+<body>
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Top Bar -->
+    <header class="top-bar">
+      <h2>Add New Appointment</h2>
+    </header>
+
+    <!-- Appointment Form -->
+    <section class="content">
+      <form id="addAppointmentForm" class="form-container">
+        <div>
+          <label for="patientName">Patient Name:</label>
+          <input type="text" id="patientName" placeholder="Enter patient name" required>
+        </div>
+        <div>
+          <label for="cni">CNI:</label>
+          <input type="text" id="cni" placeholder="Enter CNI" required>
+        </div>
+        <div>
+          <label for="appointmentDate">Date:</label>
+          <input type="date" id="appointmentDate" required>
+        </div>
+        <div>
+          <label for="appointmentTime">Time:</label>
+          <input type="time" id="appointmentTime" required>
+        </div>
+        <div>
+          <label for="notes">Notes:</label>
+          <textarea id="notes" rows="4" placeholder="Enter additional notes"></textarea>
+        </div>
+        <button type="submit" class="btn-primary">Add Appointment</button>
+        <button type="button" class="btn-secondary" onclick="returnToPreviousPage()">Return</button>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2024 MyManager. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Handle form submission
+    document.getElementById("addAppointmentForm").addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      // Get form values
+      const patientName = document.getElementById("patientName").value.trim();
+      const cni = document.getElementById("cni").value.trim();
+      const appointmentDate = document.getElementById("appointmentDate").value.trim();
+      const appointmentTime = document.getElementById("appointmentTime").value.trim();
+      const notes = document.getElementById("notes").value.trim();
+
+      // Validate inputs
+      if (!patientName || !cni || !appointmentDate || !appointmentTime) {
+        alert("Please fill in all required fields!");
+        return;
+      }
+
+      // Get existing appointments from localStorage
+      const appointments = JSON.parse(localStorage.getItem("appointments")) || [];
+
+      // Add new appointment
+      appointments.push({
+        id: appointments.length + 1,
+        patientName,
+        cni,
+        date: appointmentDate,
+        time: appointmentTime,
+        notes,
+        status: "Pending"
+      });
+
+      // Save back to localStorage
+      localStorage.setItem("appointments", JSON.stringify(appointments));
+
+      alert("Appointment added successfully!");
+
+      // Clear form
+      document.getElementById("addAppointmentForm").reset();
+    });
+
+    // Handle return to the previous page
+    function returnToPreviousPage() {
+      window.history.back();
+    }
+  </script>
+</body>
+</html>

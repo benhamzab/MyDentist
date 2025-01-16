@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reports</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="reports.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="logo">
+      <h1>MyManager</h1>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+        <li><a href="manage-patients.html"><i class="fas fa-user"></i> Manage Patients</a></li>
+        <li><a href="manage-secretary.html"><i class="fas fa-user-tie"></i> Manage Secretary</a></li>
+        <li><a href="reports.html" class="active"><i class="fas fa-file-alt"></i> Reports</a></li>
+        <li><a href="manageappointments.html"><i class="fas fa-calendar-check"></i> Manage Appointments</a></li>
+        <li><a href="../../index.html"><i class="fas fa-sign-out-alt"></i> Log Out </a></li>
+
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Top Bar -->
+    <header class="top-bar">
+      <h2>Reports</h2>
+    </header>
+
+    <!-- Content Section -->
+    <section class="content">
+      <div class="toolbar">
+        <button class="btn-export" onclick="exportPDF()"><i class="fas fa-file-pdf"></i> Export PDF</button>
+        <button class="btn-export" onclick="exportCSV()"><i class="fas fa-file-csv"></i> Export CSV</button>
+        <button class="btn-add" onclick="navigateToAddReports()"><i class="fas fa-plus"></i> Add Report</button>
+      </div>
+      <table id="reportsTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Report Name</th>
+            <th>Date</th>
+            <th>Reason for Visit</th>
+            <th>Note</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Dynamic Content -->
+        </tbody>
+      </table>
+
+ 
+    </section>
+  </main>
+
+  <script>
+    // Navigate to Add Reports page
+    function navigateToAddReports() {
+      window.location.href = "AddReports.html";
+    }
+
+    // Export to PDF
+    function exportPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      doc.text("Reports", 14, 10);
+      doc.autoTable({
+        html: "#reportsTable",
+        startY: 20,
+        theme: "grid",
+        styles: { fontSize: 10 },
+      });
+
+      doc.save("Reports.pdf");
+    }
+
+    // Export to CSV
+    function exportCSV() {
+      const reportsTable = document.getElementById("reportsTable");
+      let csv = [];
+      const rows = reportsTable.querySelectorAll("tr");
+
+      rows.forEach(row => {
+        const cols = row.querySelectorAll("td, th");
+        const rowData = Array.from(cols).map(col => col.textContent.trim());
+        csv.push(rowData.join(","));
+      });
+
+      const csvContent = `data:text/csv;charset=utf-8,${csv.join("\n")}`;
+      const encodedUri = encodeURI(csvContent);
+
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", "Reports.csv");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    // Load reports from localStorage and populate the table
+    function loadReports() {
+      const reports = JSON.parse(localStorage.getItem("reports")) || [];
+      const tableBody = document.querySelector("#reportsTable tbody");
+
+      tableBody.innerHTML = ""; // Clear existing rows
+
+      reports.forEach((report, index) => {
+        const row = `
+          <tr>
+            <td>${report.id}</td>
+            <td>${report.reportName}</td>
+            <td>${report.date}</td>
+            <td>${report.reason}</td>
+            <td>${report.note}</td>
+            <td>
+              <button class="btn-edit" onclick="editReport(${index})"><i class="fas fa-edit"></i> Edit</button>
+              <button class="btn-delete" onclick="deleteReport(${index})"><i class="fas fa-trash"></i> Delete</button>
+            </td>
+          </tr>
+        `;
+        tableBody.innerHTML += row;
+      });
+
+      loadReportsBarChart(reports);
+    }
+
+    // Edit a report
+    function editReport(index) {
+      const reports = JSON.parse(localStorage.getItem("reports")) || [];
+      const report = reports[index];
+
+      const newReason = prompt("Edit Reason for Visit:", report.reason);
+      const newNote = prompt("Edit Note:", report.note);
+
+      if (newReason !== null) report.reason = newReason;
+      if (newNote !== null) report.note = newNote;
+
+      reports[index] = report;
+      localStorage.setItem("reports", JSON.stringify(reports));
+      loadReports();
+    }
+
+    // Delete a report
+    function deleteReport(index) {
+      const reports = JSON.parse(localStorage.getItem("reports")) || [];
+      reports.splice(index, 1);
+
+      // Reassign IDs
+      reports.forEach((report, idx) => (report.id = idx + 1));
+
+      localStorage.setItem("reports", JSON.stringify(reports));
+      loadReports();
+    }
+
+   
+    // Load reports on page load
+    document.addEventListener("DOMContentLoaded", loadReports);
+  </script>
+</body>
+</html>

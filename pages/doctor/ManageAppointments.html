@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Doctor - Manage Appointments</title>
+  <link rel="stylesheet" href="ManageAppointments.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="logo">
+        <h1>MyManager</h1>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="dashboard.html" ><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+          <li><a href="manage-patients.html"><i class="fas fa-user"></i> Manage Patients</a></li>
+          <li><a href="manage-secretary.html"  ><i class="fas fa-user-tie"></i> Manage Secretary</a></li>
+          <li><a href="reports.html"><i class="fas fa-file-alt"></i> Reports</a></li>
+          <li><a href="manageappointments.html" class="active"><i class="fas fa-calendar-check"></i> Manage Appointments</a></li>
+          <li><a href="../../index.html"><i class="fas fa-sign-out-alt"></i> Log Out </a></li>
+
+        </ul>
+      </nav>
+    </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Top Bar -->
+    <header class="top-bar">
+      <h2>Manage Patient Appointments</h2>
+    </header>
+
+    <!-- Appointment Table -->
+    <section class="content">
+      <h3>Patient Appointments</h3>
+      <button class="btn-primary" onclick="window.location.href='AddAppointments.html'">Add New Appointment</button>
+      <table id="appointmentsTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Patient Name</th>
+            <th>CNI</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Notes</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Rows will be dynamically added here -->
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <script>
+    // Load appointments
+    function loadAppointments() {
+      const appointments = JSON.parse(localStorage.getItem("appointments")) || [];
+      const appointmentsTable = document.getElementById("appointmentsTable").querySelector("tbody");
+      appointmentsTable.innerHTML = ""; // Clear existing rows
+  
+      appointments.forEach(appointment => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${appointment.id}</td>
+          <td>${appointment.patientName}</td>
+          <td>${appointment.cni}</td>
+          <td>${appointment.date}</td>
+          <td>${appointment.time}</td>
+          <td>${appointment.notes || "No notes provided"}</td>
+          <td>${appointment.status || "Pending"}</td>
+          <td>
+            <button onclick="changeStatus(${appointment.id}, 'Approved')">Approve</button>
+            <button onclick="changeStatus(${appointment.id}, 'Rejected')">Reject</button>
+            <button onclick="editAppointment(${appointment.id})">Edit</button>
+          </td>
+        `;
+        appointmentsTable.appendChild(row);
+      });
+    }
+  
+    // Change appointment status
+    function changeStatus(id, status) {
+      const appointments = JSON.parse(localStorage.getItem("appointments")) || [];
+      const appointment = appointments.find(app => app.id === id);
+      if (appointment) {
+        appointment.status = status;
+        localStorage.setItem("appointments", JSON.stringify(appointments));
+        alert(`Appointment ${status.toLowerCase()}!`);
+        loadAppointments();
+      }
+    }
+  
+    // Edit appointment
+    function editAppointment(id) {
+      const appointments = JSON.parse(localStorage.getItem("appointments")) || [];
+      const appointment = appointments.find(app => app.id === id);
+      if (appointment) {
+        const newDate = prompt("Enter new date (YYYY-MM-DD):", appointment.date);
+        const newTime = prompt("Enter new time (HH:MM):", appointment.time);
+        const newNotes = prompt("Enter updated notes:", appointment.notes || ""); // Prompt for editing notes
+        if (newDate && newTime && newNotes !== null) {
+          appointment.date = newDate;
+          appointment.time = newTime;
+          appointment.notes = newNotes; // Update notes
+          localStorage.setItem("appointments", JSON.stringify(appointments));
+          alert("Appointment updated successfully!");
+          loadAppointments();
+        }
+      }
+    }
+  
+    // Load appointments on page load
+    document.addEventListener("DOMContentLoaded", loadAppointments);
+  </script>
+  
+</body>
+</html>

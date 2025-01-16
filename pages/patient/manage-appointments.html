@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Appointments</title>
+  <link rel="stylesheet" href="manage-appointments.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="logo">
+        <h1>MyDentist</h1>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="dashboard.html" ><i class="fas fa-calendar"></i> Dashboard</a></li>
+          <li><a href="manage-appointments.html" class="active"><i class="fas fa-calendar-check"></i> Manage Appointments</a></li>
+        </ul>
+      </nav>
+    </aside>
+<!-- Main Content -->
+  <main class="main-content">
+    <!-- Top Bar -->
+    <header class="top-bar">
+      <h2>Manage Appointments</h2>
+    </header>
+
+    <!-- Appointment Form -->
+    <section class="content">
+      <form id="appointmentForm">
+        <div>
+          <label for="patientName">Patient Name:</label>
+          <input type="text" id="patientName" placeholder="Enter patient name" required>
+        </div>
+        <div>
+          <label for="cni">CNI:</label>
+          <input type="text" id="cni" placeholder="Enter CNI" required>
+        </div>
+        <div>
+          <label for="appointmentDate">Date:</label>
+          <input type="date" id="appointmentDate" required>
+        </div>
+        <div>
+          <label for="appointmentTime">Time:</label>
+          <input type="time" id="appointmentTime" required>
+        </div>
+        <div>
+          <label for="notes">Notes:</label>
+          <textarea id="notes" rows="4" placeholder="Enter additional notes"></textarea>
+        </div>
+        <button type="submit" class="btn">Schedule Appointment</button>
+      </form>
+    </section>
+  </main>
+
+  <script>
+    // Handle form submission
+    document.getElementById("appointmentForm").addEventListener("submit", function (event) {
+      event.preventDefault();
+      const patientName = document.getElementById("patientName").value.trim();
+      const cni = document.getElementById("cni").value.trim();
+      const appointmentDate = document.getElementById("appointmentDate").value.trim();
+      const appointmentTime = document.getElementById("appointmentTime").value.trim();
+      const notes = document.getElementById("notes").value.trim();
+
+      if (!patientName || !cni || !appointmentDate || !appointmentTime) {
+        alert("Please fill in all required fields!");
+        return;
+      }
+
+      const appointments = JSON.parse(localStorage.getItem("appointments")) || [];
+
+      appointments.push({
+        id: appointments.length + 1,
+        patientName,
+        cni,
+        date: appointmentDate,
+        time: appointmentTime,
+        notes,
+        status: "Pending"
+      });
+
+      localStorage.setItem("appointments", JSON.stringify(appointments));
+      alert("Appointment scheduled successfully!");
+      document.getElementById("appointmentForm").reset();
+    });
+  </script>
+<script>
+
+
+if (authenticated) {
+  alert(`Welcome, ${role.charAt(0).toUpperCase() + role.slice(1)}!`);
+  window.location.href = `pages/${role}/dashboard.html`;
+}
+
+
+
+
+
+</script>
+
+
+
+
+</body>
+</html>

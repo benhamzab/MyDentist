@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Patient Dashboard</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="dashboardCSS.css">
+</head>
+<body>
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="logo">
+      <h1>MyManager</h1>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="dashboard.html" class="active"><i class="fas fa-calendar"></i> Dashboard</a></li>
+        <li><a href="manage-appointments.html"><i class="fas fa-calendar-check"></i> Manage Appointments</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Top Bar -->
+    <header class="top-bar">
+      <h2>Welcome, Patient</h2>
+      <a href="../../login.html" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </header>
+
+    <!-- Dashboard Stats -->
+    <section class="dashboard">
+      <div class="card">
+        <h3>Upcoming Appointments</h3>
+        <p id="upcomingAppointments">0</p>
+      </div>
+      <div class="card">
+        <h3>Past Appointments</h3>
+        <p id="pastAppointments">0</p>
+      </div>
+    </section>
+
+    <!-- Appointment History -->
+    <section class="appointment-history">
+      <h3>Appointment History</h3>
+      <ul id="appointmentHistory">
+        <!-- History items will be dynamically added here -->
+      </ul>
+    </section>
+  </main>
+
+  <script>
+    // Function to update dashboard statistics and history
+    function updateDashboard() {
+      // Retrieve appointments from localStorage
+      const appointments = JSON.parse(localStorage.getItem("appointments")) || [];
+
+      // Get today's date
+      const today = new Date().toISOString().split("T")[0];
+
+      // Calculate upcoming and past appointments
+      const upcomingAppointments = appointments.filter(appointment => appointment.date >= today);
+      const pastAppointments = appointments.filter(appointment => appointment.date < today);
+
+      // Update Dashboard Stats
+      document.getElementById("upcomingAppointments").textContent = upcomingAppointments.length;
+      document.getElementById("pastAppointments").textContent = pastAppointments.length;
+
+      // Update Appointment History
+      const appointmentHistory = document.getElementById("appointmentHistory");
+      appointmentHistory.innerHTML = ""; // Clear existing history
+
+      appointments.forEach(appointment => {
+        const li = document.createElement("li");
+        li.innerHTML = `
+          <div>
+            <span>${appointment.date}: ${appointment.notes || "No Notes"} - ${appointment.patientName}</span>
+            <span>Status: ${appointment.status || "Under review"}</span>
+          </div>
+          <div class="actions">
+            <button onclick="editAppointment(${appointment.id})">Edit</button>
+            <button onclick="deleteAppointment(${appointment.id})">Delete</button>
+          </div>
+        `;
+        appointmentHistory.appendChild(li);
+      });
+    }
+
+    // Function to edit an appointment
+    function editAppointment(id) {
+      const appointments = JSON.parse(localStorage.getItem("appointments")) || [];
+      const appointmentIndex = appointments.findIndex(appointment => appointment.id === id);
+
+      if (appointmentIndex === -1) {
+        alert("Appointment not found!");
+        return;
+      }
+
+      const appointment = appointments[appointmentIndex];
+
+      // Prompt for new values
+      const newDate = prompt("Enter new date (YYYY-MM-DD):", appointment.date) || appointment.date;
+      const newTime = prompt("Enter new time (HH:MM):", appointment.time) || appointment.time;
+      const newNotes = prompt("Enter new notes:", appointment.notes) || appointment.notes;
+
+      // Update the appointment
+      appointments[appointmentIndex] = {
+        ...appointment,
+        date: newDate,
+        time: newTime,
+        notes: newNotes,
+        status: "Under review" // Set status to "Under review"
+      };
+
+      // Save back to localStorage
+      localStorage.setItem("appointments", JSON.stringify(appointments));
+      alert("Appointment updated successfully!");
+      updateDashboard(); // Refresh the dashboard
+    }
+
+    // Function to delete an appointment
+    function deleteAppointment(id) {
+      const appointments = JSON.parse(localStorage.getItem("appointments")) || [];
+      const updatedAppointments = appointments.filter(appointment => appointment.id !== id);
+
+      localStorage.setItem("appointments", JSON.stringify(updatedAppointments));
+      alert("Appointment deleted successfully!");
+      updateDashboard(); // Refresh the dashboard
+    }
+
+    // Update dashboard on page load
+    document.addEventListener("DOMContentLoaded", updateDashboard);
+  </script>
+</body>
+</html>
